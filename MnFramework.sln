@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mn.Framework", "Framework\Mn.Framework.csproj", "{3D07EEC4-3497-4CFE-8F3B-A389AD492A58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mn.Framework.Business", "Framework.Business\Mn.Framework.Business.csproj", "{4F011F7E-B96B-45E4-BBEC-68331428377F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mn.Framework.Common", "Framework.Common\Mn.Framework.Common.csproj", "{22F9E980-C756-4C1A-B41D-D4774CF5181E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mn.Framework.Web", "Framework.Web\Mn.Framework.Web.csproj", "{EB1B2E99-ACF6-45B0-8F10-DABCF5E410C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.UnitTestProject", "Framework.UnitTestProject\Framework.UnitTestProject.csproj", "{BCCAF819-F69C-4501-B17A-8A98E6EAA28F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D07EEC4-3497-4CFE-8F3B-A389AD492A58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D07EEC4-3497-4CFE-8F3B-A389AD492A58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D07EEC4-3497-4CFE-8F3B-A389AD492A58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D07EEC4-3497-4CFE-8F3B-A389AD492A58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F011F7E-B96B-45E4-BBEC-68331428377F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F011F7E-B96B-45E4-BBEC-68331428377F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F011F7E-B96B-45E4-BBEC-68331428377F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F011F7E-B96B-45E4-BBEC-68331428377F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F9E980-C756-4C1A-B41D-D4774CF5181E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F9E980-C756-4C1A-B41D-D4774CF5181E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F9E980-C756-4C1A-B41D-D4774CF5181E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F9E980-C756-4C1A-B41D-D4774CF5181E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB1B2E99-ACF6-45B0-8F10-DABCF5E410C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB1B2E99-ACF6-45B0-8F10-DABCF5E410C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB1B2E99-ACF6-45B0-8F10-DABCF5E410C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB1B2E99-ACF6-45B0-8F10-DABCF5E410C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCCAF819-F69C-4501-B17A-8A98E6EAA28F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCCAF819-F69C-4501-B17A-8A98E6EAA28F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCCAF819-F69C-4501-B17A-8A98E6EAA28F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCCAF819-F69C-4501-B17A-8A98E6EAA28F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://modernnet.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Framework.UnitTestProject\\Framework.UnitTestProject.csproj
+		SccProjectName1 = Framework.UnitTestProject
+		SccLocalPath1 = Framework.UnitTestProject
+		SccProjectUniqueName2 = Framework\\Mn.Framework.csproj
+		SccProjectName2 = Framework
+		SccLocalPath2 = Framework
+		SccProjectUniqueName3 = Framework.Business\\Mn.Framework.Business.csproj
+		SccProjectName3 = Framework.Business
+		SccLocalPath3 = Framework.Business
+		SccProjectUniqueName4 = Framework.Web\\Mn.Framework.Web.csproj
+		SccProjectName4 = Framework.Web
+		SccLocalPath4 = Framework.Web
+		SccProjectUniqueName5 = Framework.Common\\Mn.Framework.Common.csproj
+		SccProjectName5 = Framework.Common
+		SccLocalPath5 = Framework.Common
+	EndGlobalSection
+EndGlobal
