@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\IUnitOfWork.cs" />
     <Compile Include="Utile\Extension.cs" />
     <Compile Include="Forms\Binding\BindingElement.cs" />
     <Compile Include="Forms\Binding\BindingConfig.cs" />

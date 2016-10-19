@@ -11,6 +11,10 @@ namespace Mn.Framework.Business.Forms
 {
     public class MnFormBusiness : BaseBusiness<MnForm>, IJbFormBusiness
     {
+        public MnFormBusiness(IUnitOfWork dbContext) : base(dbContext)
+        {
+
+        }
         public MnForm Get(Int64 id = 0)
         {
             return base.Get(f => f.Id == id);
@@ -50,8 +54,6 @@ namespace Mn.Framework.Business.Forms
             var form = Get(formId);
             form.JsonElements = jsonElements;
             return CreateEdit(form);
-        }
-
-
+        }        
     }
 }

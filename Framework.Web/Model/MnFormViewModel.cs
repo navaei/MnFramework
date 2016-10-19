@@ -9,14 +9,9 @@ namespace Mn.Framework.Web.Model
 {   
     public class MnFormViewModel : BaseViewModel
     {
-
-        public MnFormViewModel()
-        {
-        }
-
         public static MnFormViewModel FromJbForm(MnForm jbform)
         {
-            return Mn.Framework.Helper.AutoMapper.Map<MnForm, MnFormViewModel>(jbform);
+            return Helper.AutoMapper.Map<MnForm, MnFormViewModel>(jbform);
         }
 
         public MnForm ToJbForm()
@@ -26,10 +21,7 @@ namespace Mn.Framework.Web.Model
 
         public List<MnBaseElement> Elements { get; set; }
 
-        public string Name
-        {
-            get { return string.Format("MnForm{0}", Id); }
-        }
+        public string Name => $"MnForm{Id}";
 
         public int Id { get; set; }
 

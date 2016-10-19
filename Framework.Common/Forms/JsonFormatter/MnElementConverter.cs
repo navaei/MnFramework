@@ -15,7 +15,6 @@ namespace Mn.Framework.Common.Forms.JsonFormatter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-
             IMnBaseElement element = value as MnBaseElement ?? value as IMnBaseElement;
             var properties = element.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Where(p => !Attribute.IsDefined(p, typeof(JsonIgnoreAttribute)));
@@ -36,18 +35,8 @@ namespace Mn.Framework.Common.Forms.JsonFormatter
             writer.WritePropertyName("IsCustomElement");
             serializer.Serialize(writer, element is ICustomElement ? true : false);
 
-
-
-
             foreach (var property in properties)
             {
-                //if (property.PropertyType == element.CurrentMode.GetType())
-                //{
-                //    writer.WritePropertyName(property.Name);
-                //    var val = ((AccessMode)property.GetValue(element)).ToString();//  .GetValue(element);
-                //    serializer.Serialize(writer, val);
-                //}
-
                 if (Attribute.IsDefined(property, typeof(JsonConverterAttribute)))
                 {
                     var jsonAttr = property.GetCustomAttribute<JsonConverterAttribute>(false);
@@ -56,24 +45,20 @@ namespace Mn.Framework.Common.Forms.JsonFormatter
                         writer.WritePropertyName(property.Name);
                         serializer.Serialize(writer, Enum.ToObject(property.PropertyType, property.GetValue(element)).ToString());
                     }
-
                 }
                 else
                 {
                     writer.WritePropertyName(property.Name);
                     serializer.Serialize(writer, property.GetValue(element));
                 }
-
             }
 
             writer.WriteEndObject();
-
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            MnBaseElement mnElement;
-            JObject jsonObject = JObject.Load(reader);
+            var jsonObject = JObject.Load(reader);
             return GetJbElement(jsonObject);
         }
 
@@ -163,7 +148,7 @@ namespace Mn.Framework.Common.Forms.JsonFormatter
                 {
                     (mnElement as MnSection).Elements.Add(GetJbElement(element as JObject));
                 }
-            }       
+            }
             else if (elementType == typeof(MnAddress).Name)
             {
                 mnElement = new MnAddress();

@@ -16,7 +16,7 @@ namespace Mn.Framework.Reflaction
         {
             return (T)Activator.CreateInstance(Type.GetType(fullTypeName));
         }
-        public static Object Create(string fullTypeName)
+        public static object Create(string fullTypeName)
         {
             return Activator.CreateInstance(Type.GetType(fullTypeName));
         }

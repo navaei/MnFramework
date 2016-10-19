@@ -14,46 +14,21 @@ using System.Reflection;
 
 namespace Mn.Framework.Business
 {
-    public class BaseBusiness<TEntity, TPrimaryKey, TDataContext> : IDisposable, IBaseBusiness<TEntity, TPrimaryKey>
+    public class BaseBusiness<TEntity, TPrimaryKey> : IDisposable, IBaseBusiness<TEntity, TPrimaryKey>
         where TEntity : class, IBaseEntity<TPrimaryKey>
         where TPrimaryKey : struct
-        where TDataContext : DbContext
     {
 
-        TDataContext _dbContext;
-        public BaseBusiness()
-        {
-
-        }
-        public BaseBusiness(TDataContext dbContext)
+        IUnitOfWork _dbContext;
+        public BaseBusiness(IUnitOfWork dbContext)
         {
             _dbContext = dbContext;
-        }
-        public virtual BaseDataContext DataContext
-        {
-            get
-            {
-                if (_dbContext != null)
-                    return _dbContext as BaseDataContext;
-                return ServiceFactory.DataContext;
-            }
-        }
-        public virtual bool AllowSerialization
-        {
-            get
-            {
-                return DataContext.Configuration.ProxyCreationEnabled;
-            }
-            set
-            {
-                DataContext.Configuration.ProxyCreationEnabled = !value;
-            }
         }
         public virtual TEntity Get(Expression<Func<TEntity, bool>> predicate)
         {
             if (predicate != null)
             {
-                return DataContext.Set<TEntity>().Where(predicate).SingleOrDefault();
+                return _dbContext.Set<TEntity>().Where(predicate).SingleOrDefault();
             }
             else
             {
@@ -65,26 +40,11 @@ namespace Mn.Framework.Business
             return GetList().SingleOrDefault(x => x.Id.Equals(Id));
         }
 
-        //public virtual T Get<T>(Expression<Func<T, bool>> predicate) where T : BaseEntity
-        //{
-        //    if (predicate != null)
-        //    {
-        //        using (DataContext)
-        //        {
-        //            return DataContext.Set<T>().Where(predicate).SingleOrDefault();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        throw new ApplicationException("Predicate value must be passed to Get<T>.");
-        //    }
-        //}
-
         public virtual IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate)
         {
             try
             {
-                return DataContext.Set<TEntity>().Where(predicate);
+                return _dbContext.Set<TEntity>().Where(predicate);
             }
             catch (Exception e)
             {
@@ -125,7 +85,7 @@ namespace Mn.Framework.Business
         {
             try
             {
-                return DataContext.Set<T>();
+                return _dbContext.Set<T>();
             }
             catch (Exception e)
             {
@@ -136,7 +96,7 @@ namespace Mn.Framework.Business
         {
             try
             {
-                return DataContext.Set<T>();
+                return _dbContext.Set<T>();
             }
             catch (Exception e)
             {
@@ -148,7 +108,7 @@ namespace Mn.Framework.Business
         {
             try
             {
-                return DataContext.Set<TEntity>().Include(relatedEntity);
+                return _dbContext.Set<TEntity>().Include(relatedEntity);
             }
             catch (Exception e)
             {
@@ -160,7 +120,7 @@ namespace Mn.Framework.Business
         {
             try
             {
-                var contx = DataContext.Set<TEntity>();
+                var contx = _dbContext.Set<TEntity>();
                 foreach (var selector in selectors)
                     contx.Include(selector);
                 return contx;
@@ -181,7 +141,7 @@ namespace Mn.Framework.Business
 
             try
             {
-                opStatus.Status = DataContext.SaveChanges() > 0;
+                opStatus.Status = _dbContext.SaveAllChanges() > 0;
             }
             catch (Exception exp)
             {
@@ -197,24 +157,17 @@ namespace Mn.Framework.Business
         }
         public virtual OperationStatus Create<T>(T entity) where T : class, IBaseEntity<TPrimaryKey>
         {
-            OperationStatus opStatus = new OperationStatus { Status = true };
-
+            var opStatus = new OperationStatus { Status = true };
             try
             {
-                // var metaData = entity.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                //.SingleOrDefault(p => p.PropertyType == typeof(MetaData));
-                // if (metaData != null)
-                //     metaData.SetValue(entity, new MetaData() { DateCreated = DateTime.UtcNow, DateUpdated = DateTime.UtcNow });
-                //entity.MetaData = new MetaData() { DateCreated = DateTime.UtcNow, DateUpdated = DateTime.UtcNow };
-                DataContext.Set<T>().Add(entity);
-                opStatus.Status = DataContext.SaveChanges() > 0;
+                _dbContext.Set<T>().Add(entity);
+                opStatus.Status = _dbContext.SaveAllChanges() > 0;
             }
             catch (Exception exp)
             {
                 opStatus = OperationStatus.CreateFromException("Error creating " + typeof(TEntity) + ".", exp);
                 opStatus.Exception = exp;
             }
-
 
             return opStatus;
         }
@@ -225,8 +178,8 @@ namespace Mn.Framework.Business
 
             try
             {
-                DataContext.Set<TEntity>().Remove(entity);
-                opStatus.Status = DataContext.SaveChanges() > 0;
+                _dbContext.Set<TEntity>().Remove(entity);
+                opStatus.Status = _dbContext.SaveAllChanges() > 0;
             }
             catch (Exception exp)
             {
@@ -243,9 +196,9 @@ namespace Mn.Framework.Business
 
             try
             {
-                var entity = DataContext.Set<TEntity>().Find(entityId);
-                DataContext.Set<TEntity>().Remove(entity);
-                opStatus.Status = DataContext.SaveChanges() > 0;
+                var entity = _dbContext.Set<TEntity>().Find(entityId);
+                _dbContext.Set<TEntity>().Remove(entity);
+                opStatus.Status = _dbContext.SaveAllChanges() > 0;
             }
             catch (Exception exp)
             {
@@ -261,9 +214,9 @@ namespace Mn.Framework.Business
 
             try
             {
-                var entity = DataContext.Set<T>().Find(entityId);
-                DataContext.Set<T>().Remove(entity);
-                opStatus.Status = DataContext.SaveChanges() > 0;
+                var entity = _dbContext.Set<T>().Find(entityId);
+                _dbContext.Set<T>().Remove(entity);
+                opStatus.Status = _dbContext.SaveAllChanges() > 0;
             }
             catch (Exception exp)
             {
@@ -280,7 +233,7 @@ namespace Mn.Framework.Business
             var opStatus = new OperationStatus { Status = true };
             try
             {
-                IQueryable<TEntity> query = DataContext.Set<TEntity>();
+                IQueryable<TEntity> query = _dbContext.Set<TEntity>();
                 if (filter != null)
                 {
                     query = query.Where(filter);
@@ -293,9 +246,9 @@ namespace Mn.Framework.Business
 
                 foreach (var entity in query)
                 {
-                    DataContext.Entry(entity).State = EntityState.Deleted;
+                    _dbContext.Entry(entity).State = EntityState.Deleted;
                 }
-                var count = DataContext.SaveChanges();
+                var count = _dbContext.SaveAllChanges();
                 opStatus.Status = count > 0;
                 opStatus.RecordsAffected = count;
                 return opStatus;
@@ -318,15 +271,15 @@ namespace Mn.Framework.Business
                 throw new ArgumentException("Cannot add a null entity.");
             }
 
-            var entry = DataContext.Entry<T>(entity);
+            var entry = _dbContext.Entry<T>(entity);
             //entity.MetaData.DateUpdated = DateTime.UtcNow;
 
-            var set = DataContext.Set<TEntity>();
+            var set = _dbContext.Set<TEntity>();
             TEntity attachedEntity = set.Local.SingleOrDefault(e => e.Id.Equals(entity.Id));  // You need to have access to key
 
             if (attachedEntity != null)
             {
-                var attachedEntry = DataContext.Entry(attachedEntity);
+                var attachedEntry = _dbContext.Entry(attachedEntity);
                 attachedEntry.CurrentValues.SetValues(entity);
             }
             else
@@ -335,7 +288,7 @@ namespace Mn.Framework.Business
             }
             try
             {
-                opStatus.Status = DataContext.SaveChanges() > 0;
+                opStatus.Status = _dbContext.SaveAllChanges() > 0;
 
             }
             catch (Exception ex)
@@ -354,9 +307,9 @@ namespace Mn.Framework.Business
 
             try
             {
-                var entity = DataContext.Set<TEntity>().Find(entityId);
-                DataContext.Entry(entity).Property(propertyName).CurrentValue = propertyValue;
-                opStatus.Status = DataContext.SaveChanges() > 0;
+                var entity = _dbContext.Set<TEntity>().Find(entityId);
+                _dbContext.Entry(entity).Property(propertyName).CurrentValue = propertyValue;
+                opStatus.Status = _dbContext.SaveAllChanges() > 0;
             }
             catch (Exception exp)
             {
@@ -367,7 +320,7 @@ namespace Mn.Framework.Business
             return opStatus;
         }
 
-        public OperationStatus ExecuteStoreCommand(string cmdText, params object[] parameters)
+        public OperationStatus SqlCommandExecute(string cmdText, params object[] parameters)
         {
             var opStatus = new OperationStatus { Status = true };
 
@@ -375,13 +328,18 @@ namespace Mn.Framework.Business
             {
                 //opStatus.RecordsAffected = DataContext.ExecuteStoreCommand(cmdText, parameters);
                 //TODO: [Papa] = Have not tested this yet.
-                opStatus.RecordsAffected = DataContext.Database.ExecuteSqlCommand(cmdText, parameters);
+                opStatus.RecordsAffected = _dbContext.Database.ExecuteSqlCommand(cmdText, parameters);
             }
             catch (Exception exp)
             {
                 OperationStatus.CreateFromException("Error executing store command: ", exp);
             }
             return opStatus;
+        }
+
+        public Task<List<T>> SqlCommandSelect<T>(string cmdText, params object[] parameters)
+        {
+            return _dbContext.Database.SqlQuery<T>(cmdText, parameters).ToListAsync();
         }
 
         public void Dispose()
@@ -406,18 +364,11 @@ namespace Mn.Framework.Business
         #endregion
     }
 
-    public class BaseBusiness<TEntity> : BaseBusiness<TEntity, Int64>
-          where TEntity : class, IBaseEntity<Int64>
+    public class BaseBusiness<TEntity> : BaseBusiness<TEntity, long>
+          where TEntity : class, IBaseEntity<long>
     {
-
+        public BaseBusiness(IUnitOfWork dbContext) : base(dbContext)
+        {
+        }
     }
-
-    public class BaseBusiness<TEntity, TPrimaryKey> : BaseBusiness<TEntity, TPrimaryKey, BaseDataContext>
-        where TEntity : class, IBaseEntity<TPrimaryKey>
-        where TPrimaryKey : struct
-    {
-
-    }
-
-
 }

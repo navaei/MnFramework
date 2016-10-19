@@ -13,8 +13,6 @@ namespace Mn.Framework.Business
         where TEntity : IBaseEntity<TPrimaryKey>
         where TPrimaryKey : struct
     {
-        BaseDataContext DataContext { get; }
-
         IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate);
 
         IQueryable<TEntity> GetList<TKey>(Expression<Func<TEntity, bool>> predicate,
@@ -33,12 +31,12 @@ namespace Mn.Framework.Business
         OperationStatus Update(TEntity entity);
         OperationStatus UpdateProperty(TPrimaryKey entityId, string propertyName, object propertyValue);
 
-        OperationStatus ExecuteStoreCommand(string cmdText, params object[] parameters);
-
+        OperationStatus SqlCommandExecute(string cmdText, params object[] parameters); 
+        Task<List<T>> SqlCommandSelect<T>(string cmdText, params object[] parameters);
     }
 
-    public interface IBaseBusiness<TEntity> : IBaseBusiness<TEntity, Int64>
-        where TEntity : IBaseEntity<Int64>
+    public interface IBaseBusiness<TEntity> : IBaseBusiness<TEntity, long>
+        where TEntity : IBaseEntity<long>
     {
 
     }

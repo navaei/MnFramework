@@ -126,7 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\ColumnActionMenu.cs" />
-    <Compile Include="Model\JavasciptViewModel.cs" />
     <Compile Include="Model\PageGridModel.cs" />
     <Compile Include="Mvc\HtmlExtension.cs" />
     <Compile Include="PerApplicationLifetime.cs" />
